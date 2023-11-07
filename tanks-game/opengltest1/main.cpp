@@ -240,7 +240,7 @@ void ClientThread()
 			if ((std::string)msgType == "exit")
 			{
 				isRunning = false;
-				delete msgType;
+				delete[] msgType;
 			}
 			else if ((std::string)msgType == "get")
 			{
@@ -338,14 +338,53 @@ void ClientThread()
 	}
 }
 
+std::string getHost() {
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+		std::cerr << "Failed to initialize Winsock" << std::endl;
+		return "";
+	}
+
+	SOCKET udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+
+	struct sockaddr_in clientAddr;
+	clientAddr.sin_family = AF_INET;
+	clientAddr.sin_port = htons(12345); // Use the same port for broadcasting
+	clientAddr.sin_addr.s_addr = INADDR_ANY;
+
+	bind(udpSocket, (struct sockaddr*)&clientAddr, sizeof(clientAddr));
+
+	struct sockaddr_in serverAddr;
+	int addrLen = sizeof(serverAddr);
+
+	char buffer[1024];
+
+	while (true) {
+		int nBytes = recvfrom(udpSocket, buffer, sizeof(buffer), 0, (struct sockaddr*)&serverAddr, &addrLen);
+		buffer[nBytes] = '\0';
+
+		std::cout << "Say hi to: " << inet_ntoa(serverAddr.sin_addr) << std::endl;
+		return inet_ntoa(serverAddr.sin_addr);
+		// You can now connect to the server using TCP or any other protocol
+	}
+
+	closesocket(udpSocket);
+	WSACleanup();
+	return 0;
+}
+
 int connectToServer()
 {
 	std::string hostaddress;
-	std::cout << "Enter host address: ";
-	std::cin >> hostaddress;
+	std::cout << "Searching server...";
+	/*std::cin >> hostaddress;
 	std::cout << std::endl;
 	if (hostaddress == "localhost")
-		hostaddress = "127.0.0.1";
+		hostaddress = "127.0.0.1";*/
+
+	hostaddress = getHost();
+
+
 	//winsock startup
 	WSAData wsaData;
 	WORD DllVersion = MAKEWORD(2, 1);
@@ -431,9 +470,11 @@ float f(int x, int y, int oct, float B, float randY[])
 #define timerotsome 1.49
 
 
-
-int main(int argc, char** argv)
+int main()
 {
+	Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
+
+
 	srand((unsigned)NULL(time));
 
 	if (connectToServer() != 0)
@@ -467,7 +508,6 @@ int main(int argc, char** argv)
 		}
 		//std::cout << std::endl;
 	}
-	//system("pause");
 	
 	for (int i = 0; i < widthT; i++)
 	{
@@ -519,23 +559,11 @@ int main(int argc, char** argv)
 	}
 	std::cout << '#';
 
-	/*fl[900].pos =
-	fl[901].pos =
-	fl[902].pos =
-	fl[903].pos =
-	fl[904].pos =
-	fl[905].pos =
-	fl[906].pos =
-	fl[907].pos =
-	*/
 
 
-
-
-
-	Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
+	//Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
 	input::InputDetector inp(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-	SDL_ShowCursor(SDL_DISABLE);
+	//SDL_ShowCursor(SDL_DISABLE);
 	std::cout << '#';
 
 	//ver(100,1,100,vertices1,0,-2,0);
@@ -681,18 +709,6 @@ int main(int argc, char** argv)
 
 		Light.x = cosf(allthetime);
 		Light.y = sinf(allthetime);
-
-
-		//std::cout << Light.x << " " << Light.y << std::endl << timeDiff1 << std::endl << MyTank << std::endl;
-		//	tanks[MyTank].a -= glm::vec3(timeDiff1, timeDiff1, timeDiff1)*1000.f;
-		//	(tanks[MyTank].a.x > 0 ? tanks[MyTank].a.x -= timeDiff1/10 : 1);
-		//	(tanks[MyTank].a.y > 0 ? tanks[MyTank].a.y -= timeDiff1/10 : 1);
-		//	(tanks[MyTank].a.z > 0 ? tanks[MyTank].a.z -= timeDiff1/10 : 1);
-		//	(tanks[MyTank].a.x < 0 ? tanks[MyTank].a.x = 0 : 1);
-		//	(tanks[MyTank].a.y < 0 ? tanks[MyTank].a.y = 0 : 1);
-		//	(tanks[MyTank].a.z < 0 ? tanks[MyTank].a.z = 0 : 1);
-
-
 
 
 		SDL_Delay(C);

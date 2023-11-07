@@ -1,6 +1,7 @@
 #include <iostream>
 #include <winsock2.h>
 
+
 #pragma comment(lib, "ws2_32.lib")
 
 #define Max 20
@@ -24,6 +25,7 @@ struct playerT
 SOCKET Connections[Max];
 playerT players[Max];
 int TotalConnections = 0;
+int TotalDisconnected = 0;
 int players_s;
 
 
@@ -31,6 +33,9 @@ int players_s;
 void ClientThread(int index)
 {
 	SOCKET connection = Connections[index];
+	DWORD timeout = 120 * 1000;
+	setsockopt(connection, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout));
+
 	// getting name
 	int bytesRead;
 	recv(connection, (char*)&bytesRead, sizeof(int), NULL);
@@ -44,17 +49,28 @@ void ClientThread(int index)
 	// send to the player some data
 	send(connection, (char*)&index, sizeof(int), NULL);
 	//send(connection, (char*)&players_s, sizeof(int), NULL);
-
+	
 	bool isRunning = true;
 
 	while (isRunning) {
+
+
 		// get the data from player
 		std::string msgType = "get";
 		int msgLen = msgType.length();
 		send(connection, (char*)&msgLen, sizeof(int), NULL);
 		send(connection, (char*)msgType.c_str(), msgLen, NULL);
 
-		recv(connection, (char*)&players[index], sizeof(playerT), NULL);
+		int recv_size = recv(connection, (char*)&players[index], sizeof(playerT), NULL);
+		
+		if (recv_size == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSAETIMEDOUT)
+			{
+				isRunning = false;
+				break;
+			}
+		}
 		
 		// give all tanks data
 		msgType = "Vtanks";
@@ -62,16 +78,51 @@ void ClientThread(int index)
 		send(connection, (char*)&msgLen, sizeof(int), NULL);
 		send(connection, (char*)msgType.c_str(), msgLen, NULL);
 
-		send(connection, (char*)&TotalConnections, sizeof(int), NULL);
+		int t = TotalConnections - TotalDisconnected;
+		send(connection, (char*)&t, sizeof(int), NULL);
 
-		for (int i = 0; i < TotalConnections; i++)
+		for (int i = 0; i < t; i++)
 		{
 			send(connection, (char*)&players[i], sizeof(playerT), NULL);
 		}
 		
 	}
 
+	//TotalDisconnected++;
+	std::cout << buffer << " disconnected." << std::endl;
+
 }
+
+int serverBroadcast() {
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+		std::cerr << "Failed to initialize Winsock" << std::endl;
+		return 1;
+	}
+
+	SOCKET udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+
+	struct sockaddr_in serverAddr;
+	serverAddr.sin_family = AF_INET;
+	serverAddr.sin_port = htons(12345); // Choose a port for broadcasting
+	serverAddr.sin_addr.s_addr = INADDR_BROADCAST;
+
+	int broadcast = 1;
+	setsockopt(udpSocket, SOL_SOCKET, SO_BROADCAST, (char*)&broadcast, sizeof(broadcast));
+
+	const char* message = "Server: Hello, clients";
+
+	while (true) {
+		sendto(udpSocket, message, strlen(message), 0, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+		Sleep(5000); // Broadcast every 5 seconds
+	}
+
+	closesocket(udpSocket);
+	WSACleanup();
+	return 0;
+}
+
+
 
 int main()
 {
@@ -90,6 +141,7 @@ int main()
 	addr.sin_family = AF_INET;
 
 	SOCKET listener = socket(AF_INET, SOCK_STREAM, 0);
+	
 	bind(listener, (SOCKADDR*)&addr, sizeof(addr));
 	listen(listener, SOMAXCONN);
 
@@ -97,6 +149,7 @@ int main()
 	//std::cin >> players_s;
 
 	std::cout << "Server is listening for incoming connections..." << std::endl;
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)serverBroadcast, NULL, NULL, NULL);
 
 	while (true)
 	{
