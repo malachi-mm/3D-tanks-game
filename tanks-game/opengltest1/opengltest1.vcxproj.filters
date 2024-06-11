@@ -13,9 +13,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="inputDetection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -25,10 +22,22 @@
     <ClCompile Include="texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stb_image.c">
+    <ClCompile Include="obj_loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="obj_loader.cpp">
+    <ClCompile Include="online.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="global_dic.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="text.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\glad\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,7 +45,6 @@
     <ClInclude Include="Display.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="inputDetection.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="texture.h" />
@@ -44,7 +52,39 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="obj_loader.h" />
-    <ClInclude Include="debugTimer.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="include\GLFW\glfw3.h" />
+    <ClInclude Include="include\GLFW\glfw3native.h" />
+    <ClInclude Include="include\glad\glad.h" />
+    <ClInclude Include="Model.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\shader1.fs" />
+    <None Include="res\shaders\shader1.vs" />
+    <None Include="res\shaders\shader2.fs" />
+    <None Include="res\shaders\shader2.vs" />
+    <None Include="res\shaders\shaderLight.fs" />
+    <None Include="res\shaders\shaderLight.vs" />
+    <None Include="res\shaders\shaderLightCube.fs" />
+    <None Include="res\shaders\shaderLightCube.vs" />
+    <None Include="res\backpack\backpack.mtl" />
+    <None Include="res\backpack\model_loading.fs" />
+    <None Include="res\backpack\model_loading.vs" />
+    <None Include="res\shaders\shaderSingleColor.fs" />
+    <None Include="res\shaders\shaderSingleColor.vs" />
+    <None Include="res\shaders\text.vs" />
+    <None Include="res\shaders\text.fs" />
+    <None Include="res\shaders\btn.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\shaders\2d.txt" />
+    <Text Include="res\backpack\source_attribution.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\backpack\ao.jpg" />
+    <Image Include="res\backpack\diffuse.jpg" />
+    <Image Include="res\backpack\normal.png" />
+    <Image Include="res\backpack\roughness.jpg" />
+    <Image Include="res\backpack\specular.jpg" />
   </ItemGroup>
 </Project>

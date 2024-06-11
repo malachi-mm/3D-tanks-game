@@ -1,2 +1,1 @@
-﻿  Source.cpp
-  server-t.vcxproj -> C:\Users\malachi\OneDrive\Documents\GitHub\3D-tanks-game\tanks-game\Debug\server-t.exe
+﻿LINK : fatal error LNK1104: cannot open file 'C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\Debug\server-t.exe'

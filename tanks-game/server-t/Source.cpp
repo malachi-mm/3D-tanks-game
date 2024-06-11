@@ -4,7 +4,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-#define Max 20
+#define Max 100
 
 struct playerT
 {
@@ -137,7 +137,7 @@ int main()
 	SOCKADDR_IN addr;
 	int addrLen = sizeof(addr);
 	addr.sin_addr.s_addr = INADDR_ANY; // Listen on all available network interfaces
-	addr.sin_port = htons(25569); // Port to listen on
+	addr.sin_port = htons(25579); // Port to listen on
 	addr.sin_family = AF_INET;
 
 	SOCKET listener = socket(AF_INET, SOCK_STREAM, 0);

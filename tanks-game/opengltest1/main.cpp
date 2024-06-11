@@ -1,32 +1,143 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#pragma comment(lib, "ws2_32.lib")
-#include <WS2tcpip.h>
-#include <string>
+//
+//
+//#include <glad/glad.h>
+//#include <GLFW/glfw3.h>
+//
+//#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/type_ptr.hpp>
+//
+//#include "shader.h"
+//#include "camera.h"
+//#include "Model.h"
+//#include "Display.h"
+//#include "Transform.h"
+//
+//#include <iostream>
+//
+//
+//
+//void processInput(GLFWwindow* window);
+//
+//// settings
+//const unsigned int SCR_WIDTH = 800;
+//const unsigned int SCR_HEIGHT = 600;
+//
+//// camera
+////glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+//
+//Camera camera(glm::vec3(0.0f, 0.0f, 15.0f), glm::radians(90.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f); float lastX = SCR_WIDTH / 2.0f;
+//float lastY = SCR_HEIGHT / 2.0f;
+//bool firstMouse = true;
+//
+//// timing
+//float deltaTime = 0.0f;
+//float lastFrame = 0.0f;
+//
+//int main1()
+//{
+//    Display display(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL");
+//    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+//
+//    stbi_s(true);
+//
+//    // configure global opengl state
+//    // -----------------------------
+//    glEnable(GL_DEPTH_TEST);
+//
+//
+//    // build and compile shaders
+//    // -------------------------
+//    Shader ourShader("./res/backpack/model_loading.vs", "./res/backpack/model_loading.fs");
+//
+//    // load models
+//    // -----------
+//    Model ourModel("./res/backpack/backpack.obj");
+//
+//    Transform trans;
+//
+//    // draw in wireframe
+//    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//
+//    // render loop
+//    // -----------
+//    while (!glfwWindowShouldClose(display.GetWindow()))
+//    {
+//        // per-frame time logic
+//        // --------------------
+//        float currentFrame = static_cast<float>(glfwGetTime());
+//        deltaTime = currentFrame - lastFrame;
+//        lastFrame = currentFrame;
+//
+//        // input
+//        // -----
+//        processInput(display.GetWindow());
+//
+//        // render
+//        // ------
+//        display.Clear(0.05f, 0.05f, 0.05f, 1.0f);
+//        
+//
+//        // don't forget to enable shader before setting uniforms
+//        ourShader.use();
+//
+//        // view/projection transformations
+//        ourShader.setMat4("projection", camera.GetProjection());
+//        ourShader.setMat4("view", camera.GetView());
+//
+//        // render the loaded model
+//        trans.SetPos(glm::vec3(0.0f, 0.0f, 0.0f));
+//        trans.SetScale(glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+//        ourShader.setMat4("model", trans.GetModel());
+//        ourModel.Draw(ourShader);
+//
+//
+//        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+//        // -------------------------------------------------------------------------------
+//        display.SwapBuffers();
+//    }
+//
+//    // glfw: terminate, clearing all previously allocated GLFW resources.
+//    // ------------------------------------------------------------------
+//    return 0;
+//}
+//
+//// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+//// ---------------------------------------------------------------------------------------------------------
+//void processInput(GLFWwindow* window)
+//{
+//    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+//        glfwSetWindowShouldClose(window, true);
+//}
+//
+//
+//
 
-SOCKET Connection;
 
 
-#include <iostream>
-#include <SDL2/SDL.h>
-#include "display.h"
-#include "mesh.h"
-#include "shader.h"
-#include "texture.h"
-#include "transform.h"
-#include "camera.h"
-#include "inputDetection.h"
-#include <vector>
-#include <queue>
-#include <ctime>
-#include <chrono>
-#include<glm/gtx/vector_angle.hpp>
-
-static const int DISPLAY_WIDTH = 1000;
-static const int DISPLAY_HEIGHT = 800;
-#define Max 20
 
 
-#undef main
+#define GLFW_INCLUDE_NONE
+#include "online.h"
+
+
+/*
+#define GLT_IMPLEMENTATION
+#include "gltext.h"  //https://github.com/vallentin/glText
+*/
+
+//#include "text.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <codecvt>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H  
+
+static int DISPLAY_WIDTH = 1000;
+static int DISPLAY_HEIGHT = 800;
+
 
 struct Cube
 {
@@ -61,374 +172,22 @@ glm::mat3 rotatez(float alpha)
 
 
 
+
 struct yeriya
 {
 	glm::vec3 kivun;
 	glm::vec3 pos;
 };
 
-int MyTank = 0;
-float myPos[] = { 10,5,10 };
-
-#define sizetri 5
-#define widthT 64
-#define heightT 64
-Vertex fl[widthT * heightT + 8];
-unsigned int indices1[(widthT - 1) * (heightT - 1) * 2 * 3 + 3 * 8];
+vector<Vertex> fl;
+vector<unsigned int> indices1((widthT - 1) * (heightT - 1) * 2 * 3 + 3 * 8);
 typedef std::chrono::high_resolution_clock Clock;
-bool isRunning = true;
-int TotalConnections = 1;
 
 glm::vec3 hetel(glm::vec3 P1, glm::vec3 P2, glm::vec3 V);
 float heightMin(float x, float y);
 
 
-struct Tank
-{
-	Transform Tr;
-	Texture* Te;
-	glm::vec3 pos = { 0,0,0 };
-	glm::vec3 up;
-	glm::vec3 forward;
-	int life = 1000;
-	//glm::vec3 a = glm::vec3(0, 0, 0);
-
-	glm::vec3 PoS = glm::vec3(0, 0, 0);
-	glm::vec3 PoSF = glm::vec3(0, 0, 0);
-	int yeriya = 0;
-	const int timeY = 250;
-
-	Tank() {	}
-
-
-	Tank(Texture& te, glm::vec3 POS, glm::vec3 UP, glm::vec3 FORW)
-	{
-		Te = &te;
-		pos = POS;
-		up = UP;
-		forward = FORW;
-	}
-
-	void Tank::operator=(const Tank& t)
-	{
-		Te = t.Te;
-		pos = t.pos;
-		up = t.up;
-		forward = t.forward;
-		life = t.life;
-		PoS = t.PoS;
-		PoSF = t.PoSF;
-		yeriya = t.yeriya;
-	}
-
-	void MoveForward(float amt)
-	{
-		pos += forward * amt;
-	}
-
-	void MoveForwardN(float amt)
-	{
-		pos += glm::vec3(forward.x, 0, forward.z) * amt;
-	}
-
-	void MoveRight(float amt)
-	{
-		pos += glm::cross(up, forward) * amt;
-	}
-
-	glm::mat4 rotRight(float angle)
-	{
-		return glm::rotate(angle, up);
-	}
-	glm::mat4 rotZ(float angle)
-	{
-		glm::vec3 right = glm::normalize(glm::cross(up, forward));
-
-		return glm::rotate(angle, right);
-	}
-
-	void Pitch(float angle)
-	{
-		glm::vec3 right = glm::normalize(glm::cross(up, forward));
-
-		forward = glm::vec3(glm::normalize(glm::rotate(angle, right) * glm::vec4(forward, 0.0)));
-
-		//glm::mat4 aa = glm::rotate(angle, right);
-
-		up = glm::normalize(glm::cross(forward, right));
-
-	}
-
-	void RotateY(float angle)
-	{
-		static const glm::vec3 UP(0.0f, 1.0f, 0.0f);
-
-		glm::mat4 rotation = glm::rotate(angle, UP);
-
-		forward = glm::vec3(glm::normalize(rotation * glm::vec4(forward, 0.0)));
-		up = glm::vec3(glm::normalize(rotation * glm::vec4(up, 0.0)));
-	}
-
-	void RotateUP(float angle)
-	{
-		static const glm::vec3 UP = this->up;
-
-		glm::mat4 rotation = glm::rotate(angle, UP);
-
-		forward = glm::vec3(glm::normalize(rotation * glm::vec4(forward, 0.0)));
-	}
-
-	glm::vec3 right()
-	{
-		up = glm::normalize(up);
-		forward = glm::normalize(forward);
-
-		return glm::normalize(glm::cross(up, forward));
-	}
-
-	glm::vec3 rot(float angle)
-	{
-
-		glm::vec3 right = glm::normalize(glm::cross(up, forward));
-
-		glm::vec3 r;
-		r.x = glm::rotate(angle, right)[0][0];
-		r.y = glm::rotate(angle, right)[1][1];
-		r.z = glm::rotate(angle, right)[2][2];
-
-		return r;
-	}
-};
-std::vector<Tank> tanks;
-
-
 float height_min_with_tanks(float x, float z, std::vector<Tank> tt, int my = MyTank);
-
-
-int connectToServer();
-
-
-struct playerT
-{
-	float pos[3];
-	float forward[3];
-	float up[3];
-
-	float Pos[3];
-	float PosF[3];
-	int yeriya;
-
-	float Tpos[3];
-	float Trot[3];
-	float Tscale[3];
-	float Tmat[4][4];
-};
-
-
-void ClientThread()
-{
-	while (isRunning)
-	{
-		int len;
-		char* msgType;
-		recv(Connection, (char*)&len, sizeof(int), NULL);
-		if (len != 0)
-		{
-			msgType = new char[len + 1];
-			msgType[len] = '\0';
-			recv(Connection, msgType, len, NULL);
-			if ((std::string)msgType == "exit")
-			{
-				isRunning = false;
-				delete[] msgType;
-			}
-			else if ((std::string)msgType == "get")
-			{
-				playerT pt;
-				pt.pos[0] = myPos[0];
-				pt.pos[1] = myPos[1];
-				pt.pos[2] = myPos[2];
-
-				pt.forward[0] = tanks[MyTank].forward.x;
-				pt.forward[1] = tanks[MyTank].forward.y;
-				pt.forward[2] = tanks[MyTank].forward.z;
-
-				pt.up[0] = tanks[MyTank].up.x;
-				pt.up[1] = tanks[MyTank].up.y;
-				pt.up[2] = tanks[MyTank].up.z;
-
-				pt.Pos[0] = tanks[MyTank].PoS[0];
-				pt.Pos[1] = tanks[MyTank].PoS[1];
-				pt.Pos[2] = tanks[MyTank].PoS[2];
-
-				pt.PosF[0] = tanks[MyTank].PoSF[0];
-				pt.PosF[1] = tanks[MyTank].PoSF[1];
-				pt.PosF[2] = tanks[MyTank].PoSF[2];
-
-				pt.yeriya = tanks[MyTank].yeriya;
-
-				pt.Tpos[0] = tanks[MyTank].Tr.pos.x;
-				pt.Tpos[1] = tanks[MyTank].Tr.pos.y;
-				pt.Tpos[2] = tanks[MyTank].Tr.pos.z;
-
-				pt.Trot[0] = tanks[MyTank].Tr.rot.x;
-				pt.Trot[1] = tanks[MyTank].Tr.rot.y;
-				pt.Trot[2] = tanks[MyTank].Tr.rot.z;
-
-				pt.Tscale[0] = tanks[MyTank].Tr.scale.x;
-				pt.Tscale[1] = tanks[MyTank].Tr.scale.y;
-				pt.Tscale[2] = tanks[MyTank].Tr.scale.z;
-
-				for (int k = 0; k < 4; k++)
-				{
-					pt.Tmat[k][0] = tanks[MyTank].Tr.mat[k].x;
-					pt.Tmat[k][1] = tanks[MyTank].Tr.mat[k].y;
-					pt.Tmat[k][2] = tanks[MyTank].Tr.mat[k].z;
-					pt.Tmat[k][3] = tanks[MyTank].Tr.mat[k].w;
-				}
-
-				send(Connection, (char*)&pt, sizeof(pt), NULL);
-				//send(Connection, (char*)&tanks[MyTank].forward, sizeof tanks[MyTank].forward, NULL);
-				//send(Connection, (char*)&tanks[MyTank].PoS, sizeof tanks[MyTank].PoS, NULL);
-				//send(Connection, (char*)&tanks[MyTank].PoSF, sizeof tanks[MyTank].PoSF, NULL);
-
-			}
-			else if ((std::string)msgType == "Vtanks")
-			{
-				//std::cout << "~~~~~~~~~~~~~~" << std::endl;
-				recv(Connection, (char*)&TotalConnections, sizeof(TotalConnections), NULL);
-
-
-				for (int i = 0; i < TotalConnections; i++)
-				{
-					playerT pt;
-					recv(Connection, (char*)&pt, sizeof(pt), NULL);
-					//std::cout << pt.pos[0] << "\t" << pt.pos[1] << "\t" << pt.pos[2] << "\t" << std::endl;
-					if (i != MyTank)
-					{
-						tanks[i].pos = glm::vec3(pt.pos[0], pt.pos[1], pt.pos[2]);
-
-						tanks[i].forward = glm::vec3(pt.forward[0], pt.forward[1], pt.forward[2]);
-						tanks[i].up = glm::vec3(pt.up[0], pt.up[1], pt.up[2]);
-
-						tanks[i].PoS = glm::vec3(pt.Pos[0], pt.Pos[1], pt.Pos[2]);
-						tanks[i].PoSF = glm::vec3(pt.PosF[0], pt.PosF[1], pt.PosF[2]);
-
-						tanks[i].yeriya = pt.yeriya;
-
-
-						tanks[i].Tr.pos = glm::vec3(pt.Tpos[0], pt.Tpos[1], pt.Tpos[2]);
-						tanks[i].Tr.rot = glm::vec3(pt.Trot[0], pt.Trot[1], pt.Trot[2]);
-						tanks[i].Tr.scale = glm::vec3(pt.Tscale[0], pt.Tscale[1], pt.Tscale[2]);
-						for (int k = 0; k < 4; k++)
-						{
-							tanks[i].Tr.mat[k].x = pt.Tmat[k][0];
-							tanks[i].Tr.mat[k].y = pt.Tmat[k][1];
-							tanks[i].Tr.mat[k].z = pt.Tmat[k][2];
-							tanks[i].Tr.mat[k].w = pt.Tmat[k][3];
-						}
-					}
-					//recv(Connection, (char*)&tanks[MyTank].forward, sizeof tanks[MyTank].forward, NULL);
-					//recv(Connection, (char*)&tanks[MyTank].PoS, sizeof tanks[MyTank].PoS, NULL);
-					//recv(Connection, (char*)&tanks[MyTank].PoSF, sizeof tanks[MyTank].PoSF, NULL);
-					//recv(Connection, (char*)&tanks[MyTank].Tr, sizeof tanks[MyTank].Tr, NULL);
-				}
-			}
-		}
-	}
-}
-
-std::string getHost() {
-	WSADATA wsaData;
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-		std::cerr << "Failed to initialize Winsock" << std::endl;
-		return "";
-	}
-
-	SOCKET udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
-
-	struct sockaddr_in clientAddr;
-	clientAddr.sin_family = AF_INET;
-	clientAddr.sin_port = htons(12345); // Use the same port for broadcasting
-	clientAddr.sin_addr.s_addr = INADDR_ANY;
-
-	bind(udpSocket, (struct sockaddr*)&clientAddr, sizeof(clientAddr));
-
-	struct sockaddr_in serverAddr;
-	int addrLen = sizeof(serverAddr);
-
-	char buffer[1024];
-
-	while (true) {
-		int nBytes = recvfrom(udpSocket, buffer, sizeof(buffer), 0, (struct sockaddr*)&serverAddr, &addrLen);
-		buffer[nBytes] = '\0';
-
-		std::cout << "Say hi to: " << inet_ntoa(serverAddr.sin_addr) << std::endl;
-		return inet_ntoa(serverAddr.sin_addr);
-		// You can now connect to the server using TCP or any other protocol
-	}
-
-	closesocket(udpSocket);
-	WSACleanup();
-	return 0;
-}
-
-int connectToServer()
-{
-	std::string hostaddress;
-	std::cout << "Searching server...";
-	/*std::cin >> hostaddress;
-	std::cout << std::endl;
-	if (hostaddress == "localhost")
-		hostaddress = "127.0.0.1";*/
-
-	hostaddress = getHost();
-
-
-	//winsock startup
-	WSAData wsaData;
-	WORD DllVersion = MAKEWORD(2, 1);
-	if (WSAStartup(DllVersion, &wsaData) != 0)
-	{
-		MessageBox(NULL, L"Winsock startup failed", L"error", MB_OK | MB_ICONERROR);
-		return 1;
-	}
-
-	SOCKADDR_IN addr;
-	int addrlen = sizeof addr;
-	addr.sin_addr.s_addr = inet_addr(hostaddress.c_str());
-
-	int portN = 25569;
-	//std::cout << "enter port number: ";
-	//std::cin >> portN;
-
-	addr.sin_port = htons(portN);
-	addr.sin_family = AF_INET;
-
-	std::string name;
-	std::cout << "enter name: ";
-	std::cin >> name;
-
-	Connection = socket(AF_INET, SOCK_STREAM, NULL);
-	if (connect(Connection, (SOCKADDR*)&addr, sizeof addr) != 0)
-	{
-		MessageBox(NULL, L"Failed connecting", L"error", MB_OK | MB_ICONERROR);
-		return 1;
-	}
-
-	int namelen = name.length();
-	send(Connection, (char*)&namelen, sizeof(int), NULL);
-	send(Connection, name.c_str(), namelen, NULL);
-	recv(Connection, (char*)&MyTank, sizeof(int), NULL);
-	//recv(Connection, (char*)&numT, sizeof(int), NULL);
-
-	std::cout << "connected with name: " << name << " num: " << MyTank << "th" << std::endl;
-	for (int i = 0; i < Max; i++)
-		tanks.push_back(Tank());
-
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientThread, NULL, NULL, NULL);
-	return 0;
-}
 
 
 
@@ -470,23 +229,577 @@ float f(int x, int y, int oct, float B, float randY[])
 #define timerotsome 1.49
 
 
+
+/*std::string keyboardPressed(input::InputDetector inp) {
+	std::string str = "";
+		
+	std::string AB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	std::string Ns = "1234567890";
+	
+		//4 - 29    a-z
+		//30 - 39   1 - 0
+	for (int i = 4; i < 30; i++)
+		if (inp.KeyDownS(SDL_Scancode(i)))
+			str += AB[i - 4];
+
+	for (int i = 30; i < 40; i++)
+		if (inp.KeyDownS(SDL_Scancode(i)))
+			str += Ns[i - 30];
+
+	return str;
+}*/
+
+
+void startWin(Display* display, float p = 0)
+{
+	//Display display1 = *display;
+	//input::InputDetector inp1(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+
+	if (p > 1)
+		p /= 100;
+
+	//while (numWindow == START_WINDOW) {
+		//inp.update();
+
+		display->Clear(0.5, 0.2, 0.3, 1.0);
+
+
+		glColor3d(9.0, 9, 9.0);
+		glBegin(GL_QUADS);
+		//2  1
+		//3  4
+		glVertex3d(0.5, 0.8, 0.);
+		glVertex3d(-0.5 + p, 0.8, 0.);
+		glVertex3d(-0.5 + p, 0.75, 0.);
+		glVertex3d(0.5, 0.75, 0.);
+		glEnd();
+
+
+		glColor3d(0.0, 9, 0.0);
+		glBegin(GL_QUADS);
+		//2  1
+		//3  4
+		glVertex3d(-0.5 + p, 0.8, 0.);
+		glVertex3d(-0.5, 0.8, 0.);
+		glVertex3d(-0.5, 0.75, 0.);
+		glVertex3d(-0.5 + p, 0.75, 0.);
+		glEnd();
+
+		display->SwapBuffers();
+
+		//std::cout << "%";
+	//}
+
+	//display = display1;
+	numWindow = GAME_WINDOW;
+	//display1.dontKill(true);
+}
+
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1310)
+#	pragma warning(disable: 4996) // Disable the fopen, strcpy, sprintf being unsafe warning
+#endif
+
+
+unsigned int VAO, VBO;
+// render line of text
+// -------------------
+void RenderText(Shader& shader, std::string text, float x, float y, float scale, glm::vec3 color)
+{
+	// activate corresponding render state	
+	shader.use();
+	glm::mat4 projectionText = glm::ortho(0.0f, static_cast<float>(DISPLAY_WIDTH), 0.0f, static_cast<float>(DISPLAY_HEIGHT));
+	glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projectionText));
+
+	glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y, color.z);
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(VAO);
+
+	// iterate through all characters
+	std::string::const_iterator c;
+	for (c = text.begin(); c != text.end(); c++)
+	{
+		Character ch = Characters[*c];
+
+		float xpos = x + ch.Bearing.x * scale;
+		float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+		float w = ch.Size.x * scale;
+		float h = ch.Size.y * scale;
+		// update VBO for each character
+		float vertices[6][4] = {
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos,     ypos,       0.0f, 1.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+
+			{ xpos,     ypos + h,   0.0f, 0.0f },
+			{ xpos + w, ypos,       1.0f, 1.0f },
+			{ xpos + w, ypos + h,   1.0f, 0.0f }
+		};
+		// render glyph texture over quad
+		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+		// update content of VBO memory
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// render quad
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+		x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void loadChars(int f, int l, FT_Face face)
+{
+	for (unsigned int c = f; c < l; c++)
+	{
+		// Load character glyph 
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		cout << c << endl;
+		// generate texture
+		unsigned int texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			face->glyph->bitmap.width,
+			face->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			face->glyph->bitmap.buffer
+		);
+		// set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// now store character for later use
+		Character character = {
+			texture,
+			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			static_cast<unsigned int>(face->glyph->advance.x)
+		};
+
+		//cout << face->charmap->encoding << endl;
+		Characters.insert(std::pair<char, Character>(c, character));
+	}
+
+
+}
+
+
+std::string startWinEntername(Display* display)
+{
+	//Shader shader("./res/shaders/shader2.vs", "./res/shaders/shader2.fs");
+	//Shader3 lightingShader("./res/shaders/shaderLight.vs", "./res/shaders/shaderLight.fs");
+	//Shader3 lightCubeShader("./res/shaders/shaderLightCube.vs", "./res/shaders/shaderLightCube.fs");
+	stbi_s(true);
+	Shader ourShader("./res/shaders/model_loading.vs", "./res/shaders/model_loading.fs");
+	Shader shaderBtn("./res/shaders/btn.vs", "./res/shaders/model_loading.fs");
+	Shader shaderSingleColor("./res/shaders/shaderSingleColor.vs", "./res/shaders/shaderSingleColor.fs");
+	//Texture tex("./res/bricks.jpg");
+	Shader shaderText("./res/shaders/text.vs", "./res/shaders/text.fs");
+	Camera camera(glm::vec3(25.0f, 0.0f, 25.0f), glm::radians(45.0f), (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f, 100.0f);
+	camera.forward = glm::vec3(-1.0, 0.0, -1);
+	/*Vertex* vertices = new Vertex[]{
+		//Vertex2(glm::vec3(0.5f, -0.5f, 0.0f), /* glm::vec3(1.0f, 0.0f, 0.0f), / glm::vec2(1.0, 1.0)),   // bottom right
+		//Vertex2(glm::vec3(-0.5f, -0.5f, 0.0f),/*  glm::vec3(0.0f, 1.0f, 0.0f),/  glm::vec2(1.0, 0.0)),   // bottom left
+		//Vertex2(glm::vec3(-0.5f,  0.5f, 0.0f),/*  glm::vec3(0.0f, 0.0f, 1.0f),/  glm::vec2(0.0, 0.0)),    // top 
+		//Vertex2(glm::vec3(0.5f,  0.5f, 0.0f), /* glm::vec3(1.0f, 1.0f, 1.0f), / glm::vec2(0.0, 1.0))    // top 
+		
+	Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0,0,-1.0), glm::vec2(0.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0,0,-1.0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0,0,-1.0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0,0,-1.0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0,0,-1.0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0,0,-1.0), glm::vec2(0.0f, 0.0f)),
+
+	Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0,0,1.0), glm::vec2(0.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0,0,1.0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0,0,1.0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0,0,1.0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0,0,1.0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0,0,1.0), glm::vec2(0.0f, 0.0f)),
+
+	Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0,0,0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(-1.0,0,0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0,0,0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(-1.0,0,0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(-1.0,0,0), glm::vec2(0.0f, 0.0f)),
+	Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(-1.0,0,0), glm::vec2(1.0f, 0.0f)),
+
+	Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0,0,0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(1.0,0,0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0,0,0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(1.0,0,0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(1.0,0,0), glm::vec2(0.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(1.0,0,0), glm::vec2(1.0f, 0.0f)),
+
+	Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0,-1.0,0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0,-1.0,0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0,-1.0,0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f, -0.5f,  0.5f), glm::vec3(0,-1.0,0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(-0.5f, -0.5f,  0.5f), glm::vec3(0,-1.0,0), glm::vec2(0.0f, 0.0f)),
+	Vertex(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0,-1.0,0), glm::vec2(0.0f, 1.0f)),
+
+	Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0,1.0,0), glm::vec2(0.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f, -0.5f), glm::vec3(0,1.0,0), glm::vec2(1.0f, 1.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0,1.0,0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(0.5f,  0.5f,  0.5f), glm::vec3(0,1.0,0), glm::vec2(1.0f, 0.0f)),
+	Vertex(glm::vec3(-0.5f,  0.5f,  0.5f), glm::vec3(0,1.0,0), glm::vec2(0.0f, 0.0f)),
+	Vertex(glm::vec3(-0.5f,  0.5f, -0.5f), glm::vec3(0,1.0,0), glm::vec2(0.0f, 1.0f))
+	
+	
+	};
+	unsigned int k[] = {
+		0, 1, 2,
+		3, 4, 5,
+		6,7,8,
+		9,10,11,
+		12,13,14,
+		15,16,17,
+		18,19,20,
+		21,22,23,
+		24,25,26,
+		27,	28,29,
+		30,31,32,
+		33,34,35,
+	};
+	Mesh mesh(vertices, 36, k, 36);
+	Mesh lcube(vertices, 36, k, 36);
+	*/
+		
+	//Model ourModel("./res/backpack/backpack.obj");
+	//Model ourModel("./res/Tiger-t/Tiger_I.obj");
+	Model ourModel("./res/bullet.obj");
+	Model cords("./res/cords.obj");
+	Model cube("./res/cube.obj");
+
+
+	//Model ourModel("./res/tank2.txt");
+		//("./res/shaders/2d.txt");
+	
+
+	glm::mat4 projectionText = glm::ortho(0.0f, static_cast<float>(DISPLAY_WIDTH), 0.0f, static_cast<float>(DISPLAY_HEIGHT));
+	shaderText.use();
+	shaderText.setMat4("projection", projectionText);
+
+
+
+
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft))
+	{
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+		throw -1;
+	}
+
+	FT_Face face;
+	if (FT_New_Face(ft, "res/fonts/arial.ttf", 0, &face))
+	{
+		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+		throw -1;
+	}
+//	face->charmap->encoding = FT_ENCODING_UNICODE;
+	FT_Set_Pixel_Sizes(face, 0, 48);
+	/*if (FT_Load_Char(face, 'X', FT_LOAD_RENDER))
+	{
+		std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+		throw -1;
+	}*/
+
+	FT_Set_Pixel_Sizes(face, 0, 48);
+
+	// disable byte-alignment restriction
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	// load first 128 characters of ASCII set
+	
+	loadChars(0, 255, face);
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+
+
+
+	
+	int viewportWidth, viewportHeight;
+	double time;
+	std::string str = "name";
+	char strT[30];
+	//string strT;
+	//	wchar_t *str = L"ààà";
+
+	string mess = "searcing server";
+	//mess = str;
+	
+	string dots = "";
+	glfwSetWindowShouldClose(display->GetWindow(), GLFW_FALSE);
+
+	Transform trans;
+	//glEnable(GL_DEPTH_TEST);
+
+
+	glEnable(GL_DEPTH_TEST);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	//glStencilMask(0x00); // make sure we don't update the stencil buffer while drawing the floor
+	//normalShader.use();
+	//DrawFloor();
+
+	//	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	//glStencilMask(0xFF);
+	//DrawTwoContainers();
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	//glStencilMask(0x00);
+	//glDisable(GL_DEPTH_TEST);
+	//shaderSingleColor.use();
+	//DrawTwoScaledUpContainers();
+	//glStencilMask(0xFF);
+	//glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	//glEnable(GL_DEPTH_TEST);
+
+
+	while (!glfwWindowShouldClose(display->GetWindow()))
+	{
+		time = glfwGetTime();
+		display->setSize();
+
+		viewportWidth = display->GetWidth();
+		viewportHeight = display->GetHeight();
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_ESCAPE))
+		{
+			glfwSetWindowShouldClose(display->GetWindow(), GLFW_TRUE);
+			return "";
+		}
+
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_ENTER) && numWindow == FIND_SERVER_WINDOW)
+			glfwSetWindowShouldClose(display->GetWindow(), GLFW_TRUE);
+		
+		//glClear(GL_COLOR_BUFFER_BIT);
+		display->Clear(0.1f, 0.1f, 0.1f, 1.f);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//tex.Bind();
+		/*/
+		shader.Bind();
+		//float fS = sin(time);
+		//float cS = cos(time);
+		trans.SetScale(glm::vec3(0.5, 1.5, 0.5));
+		trans.SetRot(glm::vec3((float)time, (float)time, (float)time));
+		trans.SetPos(glm::vec3(0, 0, 0));
+		//trans.SetPos(glm::vec3(cS, fS, -5 - fS * 5));
+		// create transformations
+		//shader.setMat4("model", trans.GetModel());
+		shader.setMat4("projection", camera.GetProjection());
+		shader.setMat4("view", camera.GetView());//glm::translate(glm::mat4(1.f), glm::vec3(0.0f, 0.0f, -3.0f)));
+		shader.setMat4("model", trans.GetModel());
+
+		mesh.Draw();
+		trans.SetScale(glm::vec3(1.5, 0.5, 0.5));
+
+		//trans.SetPos(glm::vec3(2, 2, -10));
+		shader.setMat4("projection", camera.GetProjection());
+		shader.setMat4("view", camera.GetView());//glm::translate(glm::mat4(1.f), glm::vec3(0.0f, 0.0f, -3.0f)));
+		shader.setMat4("model", trans.GetModel());
+		lcube.Draw();
+
+		trans.SetScale(glm::vec3(0.5, 0.5, 1.5));
+
+		//trans.SetPos(glm::vec3(2, 2, -10));
+		shader.setMat4("projection", camera.GetProjection());
+		shader.setMat4("view", camera.GetView());//glm::translate(glm::mat4(1.f), glm::vec3(0.0f, 0.0f, -3.0f)));
+		shader.setMat4("model", trans.GetModel());
+		lcube.Draw();
+		*/
+
+
+
+		/*
+		glm::vec3 lightPos(sin(time),  0, cos(time));
+
+		lightingShader.Bind();
+		lightingShader.setVec3("objectColor", glm::vec3(1.0f));
+		lightingShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+		lightingShader.setVec3("lightPos", lightPos);
+		lightingShader.setVec3("viewPos", camera.pos);
+
+		// view/projection transformations
+		glm::mat4 projection = camera.GetProjection();
+		glm::mat4 view = camera.GetView();
+		lightingShader.setMat4("projection", projection);
+		lightingShader.setMat4("view", view);
+
+		// world transformation
+		trans.SetPos(glm::vec3(0,0,0));
+		trans.SetScale(glm::vec3(1.0f)); // a smaller cube
+		trans.SetRot(glm::vec3(sin(time), sin(time), sin(time)));
+		lightingShader.setMat4("model", trans.GetModel());
+		*/
+		
+
+		ourShader.use();
+		glStencilMask(0x00); // make sure we don't update the stencil buffer while drawing the floor
+
+
+
+		// view/projection transformations
+		ourShader.setMat4("projection", camera.GetProjection());
+		ourShader.setMat4("view", camera.GetView());
+
+		// render the loaded model
+		trans.SetPos(glm::vec3(0.0f, 0.0f, 0.0f));
+		float scale = 1.f;
+		trans.SetScale(glm::vec3(scale));	// it's a bit too big for our scene, so scale it down
+		trans.SetRot(glm::vec3(0, 0, 0));
+		ourShader.setMat4("model", trans.GetModel());
+		// render the cube
+
+		//glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		//glStencilMask(0xFF);
+		cords.Draw(ourShader);
+
+		for (int i = 0; i < 20; i++)
+		{
+			float f = 8*cos(time + i);
+			float r = 8*sin(time + i);
+			float w = 8 * sin(time + i);
+			trans.SetPos(glm::vec3(f, r, w));
+			trans.SetScale(glm::vec3((float)i/20));	// it's a bit too big for our scene, so scale it down
+			trans.SetRot(glm::vec3(time * i, time*i, time * i));
+			ourShader.setMat4("model", trans.GetModel());
+			ourModel.Draw(ourShader);
+		}
+	
+		shaderBtn.use();
+		trans.SetPos(glm::vec3(sin(time), 0.0f, 17.0f));
+		scale = 2.f;
+		trans.SetScale(glm::vec3(2,2,1));	// it's a bit too big for our scene, so scale it down
+		trans.SetRot(glm::vec3(0, 0, 0)); 
+		shaderBtn.setMat4("model", trans.GetModel());
+		projectionText = glm::ortho(0.0f, static_cast<float>(DISPLAY_WIDTH), 0.0f, static_cast<float>(DISPLAY_HEIGHT));
+		glUniformMatrix4fv(glGetUniformLocation(shaderBtn.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projectionText));
+
+		shaderBtn.setMat4("projection", camera.GetProjection());
+		shaderBtn.setMat4("view", camera.GetView());
+
+		cube.Draw(shaderBtn);
+
+
+		if (numWindow == FIND_SERVER_WINDOW)
+		{
+			mess = "the server find in " + serverIP;
+			RenderText(shaderText, mess, 25.0f, 50.0f, 0.5f, glm::vec3(0.5, 0.8f, 0.2f));
+			RenderText(shaderText, "press ENTER to continue", 25.0f, 20.0f, 0.50f, glm::vec3(0.5, 0.8f, 0.2f));
+
+		}
+		else
+		{
+			int j = (int)time;
+
+			dots = j%4 == 0? "." : (j % 4) - 1 == 0? ".." : (j%4) - 2 == 0 ? "..." : "";
+			RenderText(shaderText, mess + dots, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+		}
+		sprintf(strT, "Time: %.3f", time);
+		//wstring s = strT;
+		RenderText(shaderText, strT, DISPLAY_WIDTH - 110.f, 25.0f, 0.40f, glm::vec3(0.5, 0.8f, 0.2f));
+
+		
+		display->SwapBuffers();
+	}
+
+	/*gltDeleteText(text1);
+	gltDeleteText(text2);
+
+	gltTerminate();*/
+
+	return str;
+}
+
+
+
 int main()
 {
-	Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
+	// glfw: initialize and configure
+	// ------------------------------
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)connectToServer, NULL, NULL, NULL);
+	Display* display = new Display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
+	//input::InputDetector inp(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+	//SDL_SetCursor(SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_CROSSHAIR));
+
+	/// $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+	//if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	//{
+	//	std::cout << "Failed to initialize GLAD" << std::endl;
+	//	return -1;
+	//}
+	//main2(display);
+
+	username = startWinEntername(display);
+	//std::thread(connectToServer).join();
+	//startWin(display);
 
 
 	srand((unsigned)NULL(time));
 
-	if (connectToServer() != 0)
-	{
-		return 1;
-		isRunning = false;
-		return 0;
-	}
+	
+	
 
 
-	float Yrandom[widthT * heightT + 8];
-	for (int i = 0; i < widthT * heightT + 8; i++)
+	//numWindow = GAME_WINDOW;
+
+	//numWindow = NEXT_WINDOW;
+	//while (numWindow != GAME_WINDOW){}
+
+
+
+	float Yrandom[widthT * heightT + 8*5];
+	for (int i = 0; i < widthT * heightT + 8*5; i++)
 	{
 		Yrandom[i] = 2 * (float)rand() / (float)RAND_MAX;
 	}
@@ -499,16 +812,20 @@ int main()
 	{
 		for (int j = 0; j < heightT; j++)
 		{
-			fl[i * heightT + j].GetPos()->x = j * sizetri;
-			fl[i * heightT + j].GetPos()->z = i * sizetri;
-			fl[i * heightT + j].GetPos()->y = 5;//30*f(j, i, 6, 2, Yrandom);
+			Vertex ver;
+			ver.Position = glm::vec3(j * sizetri, 30 * f(j, i, 8, 2, Yrandom), i * sizetri);
+			ver.TexCoords = glm::vec2((i + 1) % 2, (j + 1) % 2);
+			fl.push_back(ver);
 
-			fl[i * heightT + j].normal = glm::vec3(0, 1, 0);
-			fl[i * heightT + j].texCoord = glm::vec2((i + 1) % 2, (j + 1) % 2);
+			//fl[i * heightT + j].GetPos()->y = ;
+
+			//fl[i * heightT + j].color = glm::vec3();
+			//fl[i * heightT + j].normal = glm::vec3(0, 1, 0);
+			//fl[i * heightT + j].TexCoords = glm::vec2((i + 1) % 2, (j + 1) % 2);
 		}
 		//std::cout << std::endl;
 	}
-	
+	/*
 	for (int i = 0; i < widthT; i++)
 	{
 		for (int j = 0; j < heightT; j++)
@@ -539,8 +856,10 @@ int main()
 
 		}
 	}
-
+	*/
 	std::cout << '#';
+	
+	
 	int h = 0;
 	for (int i = 0; i < widthT - 1; i++)
 	{
@@ -560,10 +879,8 @@ int main()
 	std::cout << '#';
 
 
-
 	//Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
-	input::InputDetector inp(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-	//SDL_ShowCursor(SDL_DISABLE);
+	
 	std::cout << '#';
 
 	//ver(100,1,100,vertices1,0,-2,0);
@@ -573,18 +890,27 @@ int main()
 
 	int iii = 0;
 
-
-	Mesh grand(fl, sizeof(fl) / sizeof(fl[0]), indices1, sizeof(indices1) / sizeof(indices1[0]));
+	Texture texture3 = getT("./res/bricks.jpg");
+	std::cout << '#';
+	vector<Texture> tvs = { texture3 };
+	//Mesh grand(fl, sizeof(fl) / sizeof(fl[0]), indices1, sizeof(indices1) / sizeof(indices1[0]));
+	Mesh grand(fl, indices1, tvs);
 	std::cout << '#';
 
 	//Mesh kir1(vertices2, sizeof(vertices1) / sizeof(vertices1[0]), indices, sizeof(indices) / sizeof(indices[0]));
 	//Mesh kir2(vertices3, sizeof(vertices1) / sizeof(vertices1[0]), indices, sizeof(indices) / sizeof(indices[0]));
 	//Mesh kir3(vertices4, sizeof(vertices1) / sizeof(vertices1[0]), indices, sizeof(indices) / sizeof(indices[0]));
 
+	Shader shader("./res/shaders/model_loading.vs", "./res/shaders/model_loading.fs");
+	Shader shaderSingleColor("./res/shaders/shaderSingleColor.vs", "./res/shaders/shaderSingleColor.fs");
+	Shader shaderText("./res/shaders/text.vs", "./res/shaders/text.fs");
 
+	Model tankModel("./res/Tiger-t/Tiger_I.obj");
+	Model bulletModel("./res/bullet.obj");
 
+	
 	std::cout << '#';
-
+	/*
 	Mesh monkey("./res/monkey3.obj");
 	std::cout << '#';
 
@@ -598,12 +924,12 @@ int main()
 	std::cout << '#';
 
 
-
+	Shader3 shader("./res/shaders/shader2.vs", "./res/shaders/shader2.fs");
 	//Mesh Flag("./res/flag4.txt");
-	Shader shader("./res/basicShader");
+	//Shader shader("./res/basicShader");
 	std::cout << '#';
 
-	Shader shaderM("./res/monkeyShader");
+	//Shader shaderM("./res/monkeyShader");
 	std::cout << '#';
 
 	Texture textureR("./res/ConcreteBare0314_2_S.jpg");
@@ -616,8 +942,7 @@ int main()
 	std::cout << '#';
 
 
-	Texture texture3("./res/bricks.jpg");
-	std::cout << '#';
+
 
 	Texture texture2("./res/gray.png");
 	std::cout << '#';
@@ -631,6 +956,7 @@ int main()
 	Texture textureC("./res/candy_cane_diffuse.jpg");
 	std::cout << '#';
 
+	*/
 
 
 
@@ -649,10 +975,12 @@ int main()
 	std::cout << '#';
 
 
-	Camera camera(glm::vec3(5.0f, 10.0f, 5.0f), 70.0f, (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f, 1000.0f);
+	Camera camera(glm::vec3(5.0f, 10.0f, 5.0f), glm::radians(45.0f), (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f, 200.0f);
+	camera.forward = glm::vec3(0, 0, 1);
+
 	std::cout << '#';
 
-	Tank t1(textureT, camera.pos, camera.up, camera.forward);
+	Tank t1(tankModel, camera.pos, camera.up, camera.forward);
 	std::cout << '#';
 
 
@@ -663,7 +991,7 @@ int main()
 
 
 
-	SDL_Event e;
+	//SDL_Event e;
 	float counter = 0.0f;
 
 	float upx = 0;
@@ -671,15 +999,14 @@ int main()
 	int yr = 0;
 	float goup = 0.5;
 	float godown = -goup;
-	float C = 0;
+	float C = 0.22;
 	float D = 10;
-	float camU = 4;
-	float camF = 10;
+	float camU = 6.5;
+	float camF = 13.8;
 	float rotM = 0;
 	float rotP = 0;
 	float counter2 = 0;
 	int lorr = 1;
-	glm::vec4 Light = glm::vec4(1.f, 0.f, 0.f, 0.f);
 
 
 
@@ -687,7 +1014,7 @@ int main()
 	tanks[MyTank].up = camera.up;
 
 	for (int i = 0; i < Max; i++)
-		tanks[i] = Tank(textureT, glm::vec3(15 * i, heightMin(15 * i, 15 * i), 15 * i), camera.up, camera.forward);
+		tanks[i] = Tank(tankModel, glm::vec3(15 * i, heightMin(15 * i, 15 * i), 15 * i), camera.up, camera.forward);
 
 	glm::mat4 H;
 	glLineWidth(2);
@@ -697,51 +1024,113 @@ int main()
 	std::cout << '#';
 	double allthetime = 0;
 
-	while (isRunning)
+
+
+	
+
+	//Camera camera(glm::vec3(0.0f, 10.0f, 0.0f), glm::radians(70.0f), (float)DISPLAY_WIDTH / (float)DISPLAY_HEIGHT, 0.1f, 200.0f);
+	//camera.forward = glm::vec3(0, 0, 1);
+	Transform trans;
+
+	/*
+	if (!gltInit())
 	{
+		fprintf(stderr, "Failed to initialize glText\n");
+		glfwTerminate();
+		throw EXIT_FAILURE;
+	}
+	GLTtext* text2 = gltCreateText();
+	*/
+	//int viewportWidth, viewportHeight;
+	//double time;
+	std::string str = "name";
+	char strT[30];
+
+	glm::mat4 projectionText = glm::ortho(0.0f, static_cast<float>(DISPLAY_WIDTH), 0.0f, static_cast<float>(DISPLAY_HEIGHT));
+	shaderText.use();
+	glUniformMatrix4fv(glGetUniformLocation(shaderText.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projectionText));
+
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_STENCIL_TEST);
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+
+	glfwSetWindowShouldClose(display->GetWindow(), GLFW_FALSE);
+	double time = 0, prevT = 0;
+	
+	while (!glfwWindowShouldClose(display->GetWindow()))
+	{
+		//time = glfwGetTime();
+		time = glfwGetTime()*2.f;
+		display->setSize();
+
+		int viewportWidth = display->GetWidth();
+		int viewportHeight = display->GetHeight();
+
+		//viewportWidth = display->GetWidth();
+		//viewportHeight = display->GetHeight();
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_ESCAPE))
+			glfwSetWindowShouldClose(display->GetWindow(), GLFW_TRUE);
+		
+		display->Clear(0.02f, 0.95f, 0.92f, 1.0f);
+
+
+		shader.use();
+
+		// view/projection transformations
+		shader.setMat4("projection", camera.GetProjection());
+		shader.setMat4("view", camera.GetView());
+
+		// render the loaded model
+		trans.SetPos(glm::vec3(0.0f, 0.0f, 0.0f));
+		trans.SetScale(glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+		shader.setMat4("model", trans.GetModel());
+
+
+		//grand.Draw(shader);
+		
 		time2 = std::clock();
-		float timeDiff1 = time2 - time1;
+		float timeDiff1 = (time2 - time1)/2;
 		float timeDiff2 = timeDiff1 / 16;
 		timeDiff1 /= 32;
 		allthetime += timeDiff1 / 128;
 		tanks[MyTank].up = glm::normalize(tanks[MyTank].up);
 		tanks[MyTank].forward = glm::normalize(tanks[MyTank].forward);
+		//timeDiff1 = (time-prevT)*7;
+		//timeDiff2 = timeDiff2/2;
+		
 
-		Light.x = cosf(allthetime);
-		Light.y = sinf(allthetime);
+		//SDL_Delay(C);
 
-
-		SDL_Delay(C);
-
-		inp.update();
+		//inp.update();
 
 		glm::mat4 Z;
 		glm::mat4 Y;
 
-		while (SDL_PollEvent(&e))
-		{
-			if (e.type == SDL_QUIT)
-				isRunning = false;
-		}
+		
 
-		display.Clear(0.02f, 0.95f, 0.92f, 1.0f);
 
-		if (inp.KeyDown(SDL_SCANCODE_Q))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_Q))
 			camU += 0.1;
-		if (inp.KeyDown(SDL_SCANCODE_E))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_E))
 			camU -= 0.1;
 
-		if (inp.KeyDown(SDL_SCANCODE_A))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_A))
 			camF += 0.1;
-		if (inp.KeyDown(SDL_SCANCODE_D))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_D))
 			camF -= 0.1;
 
-		if (inp.KeyDown(SDL_SCANCODE_U))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_U))
 			camera.pos += glm::vec3(camera.up.x * goup, camera.up.y * goup, camera.up.z * goup);
-		if (inp.KeyDown(SDL_SCANCODE_D))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_D))
 			camera.pos += glm::vec3(camera.up.x * godown, camera.up.y * godown, camera.up.z * godown);
 
-		if (inp.KeyDown(SDL_SCANCODE_UP))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_UP))
 		{
 			//	if (tanks[MyTank].a.x + tanks[MyTank].a.y + tanks[MyTank].a.z < timeDiff1/6)
 			//		tanks[MyTank].a += glm::vec3(tanks[MyTank].forward);
@@ -755,29 +1144,29 @@ int main()
 		}
 
 
-		if (inp.KeyDown(SDL_SCANCODE_LEFT) && inp.KeyDown(SDL_SCANCODE_LSHIFT))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_LEFT) && glfwGetKey(display->GetWindow(), GLFW_KEY_LEFT_SHIFT))
 		{
 			camera.RotateY((0.01 * timeDiff2) * timerotsome);
 			rotM += (0.01 * timeDiff2) * timerotsome;
 		}
-		else if (inp.KeyDown(SDL_SCANCODE_LEFT))
+		else if (glfwGetKey(display->GetWindow(), GLFW_KEY_LEFT))
 		{
 			Y = tanks[MyTank].rotRight((0.01 * timeDiff2) * timerotsome);
 			tanks[MyTank].Tr.mat *= Y;
 			tanks[MyTank].forward = glm::vec3(glm::normalize(tanks[MyTank].rotRight((0.01 * timeDiff2) * timerotsome) * glm::vec4(tanks[MyTank].forward, 0.0)));
 		}
 
-		if (inp.KeyDown(SDL_SCANCODE_DOWN))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_DOWN))
 		{
 			camera.MoveForward(godown * timeDiff1);
 			tanks[MyTank].MoveForward(godown * timeDiff1);
 		}
-		if (inp.KeyDown(SDL_SCANCODE_RIGHT) && inp.KeyDown(SDL_SCANCODE_LSHIFT))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_RIGHT) && glfwGetKey(display->GetWindow(), GLFW_KEY_LEFT_SHIFT))
 		{
 			camera.RotateY((-0.01 * timeDiff2) * timerotsome);
 			rotM -= (0.01 * timeDiff2) * timerotsome;
 		}
-		else if (inp.KeyDown(SDL_SCANCODE_RIGHT))
+		else if (glfwGetKey(display->GetWindow(), GLFW_KEY_RIGHT))
 		{
 			Y = tanks[MyTank].rotRight((-0.01 * timeDiff2) * timerotsome);
 			tanks[MyTank].Tr.mat *= Y;
@@ -786,7 +1175,7 @@ int main()
 		}
 
 
-		camera.forward = glm::normalize(glm::vec3(tanks[MyTank].forward.x, /*camera.forward.y*/0, tanks[MyTank].forward.z));
+		camera.forward = glm::normalize(glm::vec3(tanks[MyTank].forward.x, 0, tanks[MyTank].forward.z));
 
 		if (height_min_with_tanks(camera.pos.x, camera.pos.z, tanks))
 		{
@@ -808,21 +1197,22 @@ int main()
 		myPos[2] = tanks[MyTank].pos.z;
 
 
-		if (inp.KeyDown(SDL_SCANCODE_SPACE) && counter >= 0.5 * timeDiff1)
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_SPACE) && counter >= TimeD)
 		{
+			//std::cout << "c: " << counter << " | td1: " << timeDiff1 << std::endl;
 			tanks[MyTank].yeriya = tanks[MyTank].timeY + 2;
-			counter = 0;
+			counter = -TimeD;
 
-			/*	for (int j = 0; j < tanks.size(); j++)
-				{
-					tanks[j].yeriya = tanks[j].timeY + 2;
-
-				}
-				std::cout << std::endl;*/
+			//	for (int j = 0; j < tanks.size(); j++)
+			//	{
+			//		tanks[j].yeriya = tanks[j].timeY + 2;
+			//
+			//	}
+			//	std::cout << std::endl;
 
 		}
 
-		if (inp.KeyDown(SDL_SCANCODE_W))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_W))
 		{
 			Z = tanks[MyTank].rotZ(0.01 * timeDiff2);
 			tanks[MyTank].Tr.mat *= Z;
@@ -832,7 +1222,7 @@ int main()
 			rotP += 0.01 * timeDiff2;
 		}
 
-		if (inp.KeyDown(SDL_SCANCODE_S))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_S))
 		{
 			Z = tanks[MyTank].rotZ(-0.01 * timeDiff2);
 			tanks[MyTank].Tr.mat *= Z;
@@ -846,7 +1236,7 @@ int main()
 		tanks[MyTank].Tr.SetPos(camera.pos);
 		tanks[MyTank].pos = camera.pos;
 		//	camera.pos = tanks[MyTank].pos;
-		if (inp.KeyDown(SDL_SCANCODE_P))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_P))
 		{
 			tanks[MyTank].forward = camera.forward;
 
@@ -856,31 +1246,37 @@ int main()
 
 			camU = 4;
 			camF = 9;
+
+			C = 0.22;
+			camU = 6.5;
+			camF = 13.8;
 		}
 
-		float xplus = inp.getMouseXNormalized();
-		float yplus = inp.getDeltaMouseY();
-		upy = yplus;
+		//float xplus = inp.getMouseXNormalized();
+		//float yplus = inp.getDeltaMouseY();
+		//upy = yplus;
 
-		if (inp.KeyDown(SDL_SCANCODE_N))
+		//cout << "U: " << camU << " F: " << camF << " C: " << C << endl;
+
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_N))
 		{
 			C += 0.001 * timeDiff2;
 			//std::cout << C << std::endl;
 		}
-		if (inp.KeyDown(SDL_SCANCODE_B))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_B))
 		{
 			C -= 0.001*timeDiff2;
 			//std::cout << C << std::endl;
 		}
 
-		if (inp.KeyDown(SDL_SCANCODE_G))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_G))
 		{
 			tanks[MyTank].life -= 50 * timeDiff2;
 
 			D += 0.02 * timeDiff2;
 			//std::cout << D << std::endl;
 		}
-		if (inp.KeyDown(SDL_SCANCODE_H))
+		if (glfwGetKey(display->GetWindow(), GLFW_KEY_H))
 		{
 			tanks[MyTank].life += 50 * timeDiff2;
 
@@ -888,30 +1284,46 @@ int main()
 			//std::cout << D << std::endl;
 		}
 
-		camera.pos += glm::vec3(camera.up.x * camU, camera.up.y * camU, camera.up.z * camU) - glm::vec3(camera.forward.x * camF, camera.forward.y * camF, camera.forward.z * camF);
+		camera.pos += camera.up * camU - camera.forward * camF;
 		camera.Pitch(C);
 
-		shader.Bind();
-		tanks[MyTank].Te->Bind();
+		
+		shader.use();
+		//tanks[MyTank].Te->Bind();
 		//		shader.Update(tanks[MyTank].Tr, camera);///////////////////////
 
 		//		tank.Draw();
+		/*/shader.setMat4("projection", camera.GetProjection());
+		shader.setMat4("view", camera.GetView());
+		shader.setMat4("model", tanks[MyTank].Tr.GetModel());
+		//shader.setMat4("model", transformY.GetModel());
 
-		shader.Update(transformY, camera);
-		tank.Draw();
+		//shader.Update(transformY, camera);
+		//tankModel.Draw(shader);
 
 
-		shader.Update(transform3, camera);
-
+		//shader.Update(transform3, camera);
+		shader.setMat4("projection", camera.GetProjection());
+		shader.setMat4("view", camera.GetView());
+		shader.setMat4("model", transform3.GetModel());
+		*/
 		//Flag.Draw();
 
+		//shader.Update(transform2, camera);
+		shader.setMat4("projection", camera.GetProjection());
+		shader.setMat4("view", camera.GetView());
+		shader.setMat4("model", transform2.GetModel());
+
+
+		//texture3.Bind();
+		grand.Draw(shader);
 
 		tanks[MyTank].PoS = tanks[MyTank].pos - (tanks[MyTank].forward * 1.f) + glm::vec3(tanks[MyTank].up.x, 0.89 * tanks[MyTank].up.y, tanks[MyTank].up.z);
 		tanks[MyTank].PoSF = tanks[MyTank].PoS;
 
 		for (int w = 0; w < 70; w++)
 		{
-			if (tanks[MyTank].PoS.y <= heightMin(tanks[MyTank].PoS.x, tanks[MyTank].PoS.z) - 1)
+			if (tanks[MyTank].PoS.y <= heightMin(tanks[MyTank].PoS.x, tanks[MyTank].PoS.z) + 2)
 				w = 100;
 			else
 				tanks[MyTank].PoS += tanks[MyTank].forward * 3.f;
@@ -928,11 +1340,44 @@ int main()
 			//}
 			//else
 			{
+
+				shader.use();
+				glStencilMask(0x00); // make sure we don't update the stencil buffer while drawing the floor
+
+				// view/projection transformations
 				tanks[i].Tr.SetPos(tanks[i].pos); //////////////////////////////////////////////////////should change
-				shader.Update(tanks[i].Tr, camera);
+				//shader.Update(tanks[i].Tr, camera);
+				shader.setMat4("projection", camera.GetProjection());
+				shader.setMat4("view", camera.GetView());
+				shader.setMat4("model", tanks[i].Tr.GetModel());
 
-				tank.Draw();
 
+				glStencilFunc(GL_ALWAYS, 1, 0xFF);
+				glStencilMask(0xFF);
+				tankModel.Draw(shader);
+
+				// 2nd. render pass: now draw slightly scaled versions of the objects, this time disabling stencil writing.
+				// Because the stencil buffer is now filled with several 1s. The parts of the buffer that are 1 are not drawn, thus only drawing 
+				// the objects' size differences, making it look like borders.
+				// -----------------------------------------------------------------------------------------------------------------------------
+				if (i != MyTank)
+				{
+					shaderSingleColor.use();
+
+					glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+					glStencilMask(0x00);
+					glDisable(GL_DEPTH_TEST);
+					shaderSingleColor.setMat4("projection", camera.GetProjection());
+					shaderSingleColor.setMat4("view", camera.GetView());
+					shaderSingleColor.setMat4("model", tanks[i].Tr.GetModel());
+					tankModel.Draw(shaderSingleColor);
+				}
+				glStencilMask(0xFF);
+				glStencilFunc(GL_ALWAYS, 0, 0xFF);
+				glEnable(GL_DEPTH_TEST);
+
+
+				
 
 				if (tanks[i].yeriya > 10 && i != MyTank)
 				{
@@ -956,20 +1401,15 @@ int main()
 			}
 		}
 
-		shader.Update(transform2, camera);
-
-
-		texture3.Bind();
-		grand.Draw();
-
-
+		
+		
 
 		glm::vec3 aq = tanks[MyTank].right() * 0.95f;
 		float life = ((float)(tanks[MyTank].life - 500) / 1000) * 2;
-		float li = (counter - 0.25) * 4;
+		float li = counter/ TimeD;
 		if (li >= 1)
 			li = 1;
-
+		
 		glLineWidth(5);
 
 		glColor3f(0.0, 5, 0.0);
@@ -984,14 +1424,14 @@ int main()
 		glVertex3f(tanks[MyTank].pos.x - aq.x, tanks[MyTank].pos.y + 1.6, tanks[MyTank].pos.z - aq.z);
 		glEnd();
 
-		yellow.Bind();
+		//yellow.Bind();
 
 		glBegin(GL_LINES);
 		glVertex3f(tanks[MyTank].pos.x + aq.x, tanks[MyTank].pos.y + 1.5, tanks[MyTank].pos.z + aq.z);
 		glVertex3f(tanks[MyTank].pos.x - aq.x * li, tanks[MyTank].pos.y + 1.5, tanks[MyTank].pos.z - aq.z * li);
 		glEnd();
 
-		red.Bind();
+		//red.Bind();
 
 		glBegin(GL_LINES);
 		glVertex3f(tanks[MyTank].pos.x + aq.x, tanks[MyTank].pos.y + 1.6, tanks[MyTank].pos.z + aq.z);
@@ -1012,21 +1452,30 @@ int main()
 				glVertex3f(tanks[i].PoS.x, tanks[i].PoS.y, tanks[i].PoS.z);
 				glVertex3f(tanks[i].PoSF.x, tanks[i].PoSF.y, tanks[i].PoSF.z);
 				glEnd();
+
+				float y = 1-(tanks[i].yeriya/(tanks[i].timeY+2.f));
+
+				shader.setMat4("projection", camera.GetProjection());
+				shader.setMat4("view", camera.GetView());
+				trans.SetPos(glm::vec3(tanks[i].pos + 150*y*tanks[i].forward));//.x, tanks[i].PoS.y, tanks[i].PoS.z));
+				shader.setMat4("model", trans.GetModel());
+
+				bulletModel.Draw(shader);
 			}
 		}
-
+		
 		aq *= 0.8;
-
+		
 		glm::vec3 AAA1 = aq + 1.5f * tanks[MyTank].forward;
 		glm::vec3 AAA2 = aq - tanks[MyTank].forward;
 		glm::vec3 AAA3 = aq + tanks[MyTank].forward;
 		glm::vec3 AAA4 = aq - 1.5f * tanks[MyTank].forward;
 
-
-		float r1 =/*tanks[MyTank].pos.y - AAA1.y;/*/ height_min_with_tanks(tanks[MyTank].pos.x - AAA1.x, tanks[MyTank].pos.z - AAA1.z, tanks);
-		float r2 =/*tanks[MyTank].pos.y - AAA2.y;/*/ height_min_with_tanks(tanks[MyTank].pos.x - AAA2.x, tanks[MyTank].pos.z - AAA2.z, tanks);
-		float r3 =/*tanks[MyTank].pos.y + AAA3.y;/*/ height_min_with_tanks(tanks[MyTank].pos.x + AAA3.x, tanks[MyTank].pos.z + AAA3.z, tanks);
-		float r4 =/*tanks[MyTank].pos.y + AAA4.y;/*/ height_min_with_tanks(tanks[MyTank].pos.x + AAA4.x, tanks[MyTank].pos.z + AAA4.z, tanks);
+		
+		float r1 =  height_min_with_tanks(tanks[MyTank].pos.x - AAA1.x, tanks[MyTank].pos.z - AAA1.z, tanks);
+		float r2 =  height_min_with_tanks(tanks[MyTank].pos.x - AAA2.x, tanks[MyTank].pos.z - AAA2.z, tanks);
+		float r3 =  height_min_with_tanks(tanks[MyTank].pos.x + AAA3.x, tanks[MyTank].pos.z + AAA3.z, tanks);
+		float r4 =  height_min_with_tanks(tanks[MyTank].pos.x + AAA4.x, tanks[MyTank].pos.z + AAA4.z, tanks);
 
 		glm::vec3 p1(tanks[MyTank].pos.x - AAA1.x, r1, tanks[MyTank].pos.z - AAA1.z);
 		glm::vec3 p2(tanks[MyTank].pos.x - AAA2.x, r2, tanks[MyTank].pos.z - AAA2.z);
@@ -1052,7 +1501,7 @@ int main()
 		if ((p2 + (p4 - p3)).y > p1.y - 0.01)
 			p1 = p2 + (p4 - p3);
 
-
+		/*
 		glBegin(GL_LINE_LOOP);
 		glVertex3f(p1.x, p1.y, p1.z);
 		glVertex3f(p2.x, p2.y, p2.z);
@@ -1060,7 +1509,7 @@ int main()
 		glVertex3f(p4.x, p4.y, p4.z);
 		glEnd();
 
-
+		*/
 
 		tanks[MyTank].forward = glm::normalize(p2 - p1);
 		glm::vec3 left2 = glm::normalize(p4 - p1);
@@ -1071,27 +1520,17 @@ int main()
 		tanks[MyTank].Tr.mat[1] = glm::vec4(tanks[MyTank].up, 0);
 		tanks[MyTank].Tr.mat[2] = glm::vec4(tanks[MyTank].forward, 0);
 
-		//send socket:!!
-		//
-		//transform1.
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		//
+		
 
+		//shader.Update(transformc, camera);
 
-		shader.Update(transformc, camera);
-		textureC.Bind();
-		candy.Draw();
+		//shader.setMat4("projection", camera.GetProjection());
+		//shader.setMat4("view", camera.GetView());
+		//shader.setMat4("model", transformc.GetModel());
+
+		
+		//textureC.Bind();
+		//candy.Draw();
 
 
 		camera.Pitch(-C);
@@ -1100,8 +1539,21 @@ int main()
 
 		counter2 += 0.005;
 
-		display.SwapBuffers();
-		counter += 0.01f;
+		
+		sprintf(strT, "Time: %.4f", time);
+		RenderText(shaderText, strT, 2.0f, 2.0f, 0.4f, glm::vec3(0.0, 0.0f, 0.5f));
+
+		sprintf(strT, "fps: %.4f", 1 / (time - prevT));
+		RenderText(shaderText, strT, 2.0f, 20.f, 0.4f, glm::vec3(0.0, 0.0f, 0.5f));
+
+
+		prevT = time;
+		
+
+
+
+		display->SwapBuffers();
+		counter += timeDiff1;
 		camera.pos -= glm::vec3(camera.up.x * camU, camera.up.y * camU, camera.up.z * camU) - glm::vec3(camera.forward.x * camF, camera.forward.y * camF, camera.forward.z * camF);
 
 

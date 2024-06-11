@@ -1,89 +1,69 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Msbuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (opengltest1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Display.cpp
-  inputDetection.cpp
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\inputDetection.cpp(8,25): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
-  mesh.cpp
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(496,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(510,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (opengltest1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(437,18): warning C4353: nonstandard extension used: constant 0 as function expression.  Use '__noop' function intrinsic instead
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(461,40): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\online.h(45,30): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\online.h(94,27): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\online.h(204,29): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(264,36): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(357,29): warning C4018: '<': signed/unsigned mismatch
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(700,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(701,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(702,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(790,18): warning C4353: nonstandard extension used: constant 0 as function expression.  Use '__noop' function intrinsic instead
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(991,30): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1004,16): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1007,19): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1019,69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1019,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1100,19): warning C4244: 'initializing': conversion from 'clock_t' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1121,15): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1123,15): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1126,15): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1128,15): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1151,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1152,31): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1156,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1158,95): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1168,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1169,31): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1173,51): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1176,96): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1190,25): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(462,40): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(476,40): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(477,40): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(633,30): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(662,68): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(662,60): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(675,19): warning C4244: 'initializing': conversion from 'clock_t' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(682,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(683,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(698,13): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(714,15): warning C4305: '+=': truncation from 'double' to 'float'
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(716,15): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(719,15): warning C4305: '+=': truncation from 'double' to 'float'
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(721,15): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(744,38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(745,44): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(749,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(751,95): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(761,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(762,44): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(766,51): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(769,96): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(783,36): warning C4244: '-=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(811,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(816,28): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(821,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(826,28): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(846,15): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(851,26): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(856,24): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(862,40): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(864,25): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(869,40): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(871,25): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(934,69): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(953,12): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(961,67): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(962,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(967,69): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(968,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(974,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(975,67): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(981,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(982,69): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(989,37): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(1085,20): warning C4305: '+=': truncation from 'double' to 'float'
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(634,12): warning C4101: 'N': unreferenced local variable
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(664,12): warning C4101: 'H': unreferenced local variable
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(1118,20): warning C4018: '<': signed/unsigned mismatch
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(1155,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\main.cpp(1156,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-  Shader.cpp
-  obj_loader.cpp
-C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\opengltest1\obj_loader.cpp(378,13): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  texture.cpp
-  stb_image.c
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1205,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1219,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1224,17): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1229,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1234,17): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1252,12): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1254,15): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1265,15): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1270,14): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1276,29): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1278,14): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1283,29): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1285,14): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1397,58): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1419,67): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1420,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1425,69): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1426,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1432,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1433,67): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1439,62): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1440,69): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1542,20): warning C4305: '+=': truncation from 'double' to 'float'
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(992,12): warning C4101: 'N': unreferenced local variable
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1021,12): warning C4101: 'H': unreferenced local variable
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1625,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\opengltest1\main.cpp(1626,9): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 1050 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 1080 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  opengltest1.vcxproj -> C:\Users\malachi\OneDrive\Documents\GitHub\3d-tank-game\client-t\Release\client-T.exe
+  opengltest1.vcxproj -> C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\Release\client-T.exe

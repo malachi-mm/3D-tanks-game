@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include "camera.h"
+//#include "camera.h"
 
 struct Transform
 {
@@ -32,13 +32,13 @@ public:
 		return posMat * rotMat * scaleMat * mat;
 	}
 
-	inline glm::mat4 GetMVP(const Camera& camera) const
-	{
-		glm::mat4 VP = camera.GetViewProjection();
-		glm::mat4 M = GetModel();
+	//inline glm::mat4 GetMVP(const Camera& camera) const
+	//{
+	//	glm::mat4 VP = camera.GetViewProjection();
+	//	glm::mat4 M = GetModel();
 
-		return VP * M;//camera.GetViewProjection() * GetModel();
-	}
+	//	return VP * M;//camera.GetViewProjection() * GetModel();
+	//}
 
 	inline glm::vec3* GetPos() { return &pos; }
 	inline glm::vec3* GetRot() { return &rot; }

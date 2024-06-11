@@ -1,5 +1,1 @@
-﻿  Source.cpp
-C:\Users\malachi\OneDrive\Documents\כל מיני דברים אקראיים\תוכנות שלי מגניבות\server-t\server-t\Source.cpp(53,32): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\malachi\OneDrive\Documents\כל מיני דברים אקראיים\תוכנות שלי מגניבות\server-t\server-t\Source.cpp(61,28): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\malachi\OneDrive\Documents\כל מיני דברים אקראיים\תוכנות שלי מגניבות\server-t\server-t\Source.cpp(108,96): warning C4312: 'type cast': conversion from 'int' to 'LPVOID' of greater size
-  server-t.vcxproj -> C:\Users\malachi\OneDrive\Documents\כל מיני דברים אקראיים\תוכנות שלי מגניבות\server-t\x64\Debug\server-t.exe
+﻿  server-t.vcxproj -> C:\Users\malachi\GitHub\3D-tanks-game\tanks-game\x64\Debug\server-t.exe
